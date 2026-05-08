@@ -1,7 +1,10 @@
 import maya.cmds as cmds
 
 
-def create_cube_control(prefix="L_", name="hand_ctrl", size=1.0):
+def create_cube_control(prefix="L", name="hand_ctrl", size=1.0, position=(0, 0, 0)):
+
+    if prefix not in ["L", "R"]:
+        prefix = "L"
 
     ctrl_name = f"{prefix}_{name}"
     grp_name = f"{ctrl_name}_grp"
@@ -23,14 +26,12 @@ def create_cube_control(prefix="L_", name="hand_ctrl", size=1.0):
         (-h, h, h), (-h, h, -h)
     ]
 
-   
     ctrl = cmds.curve(name=ctrl_name, degree=1, point=points)
 
     grp = cmds.group(ctrl, name=grp_name)
 
-    cmds.xform(grp, worldSpace=True, pivots=(0, 0, 0))
-    cmds.xform(ctrl, worldSpace=True, pivots=(0, 0, 0))
+    cmds.xform(grp, ws=True, t=position)
 
-    cmds.makeIdentity(ctrl, apply=True, translate=True, rotate=True, scale=True)
+    cmds.makeIdentity(ctrl, apply=True, t=True, r=True, s=True)
 
     return grp, ctrl
