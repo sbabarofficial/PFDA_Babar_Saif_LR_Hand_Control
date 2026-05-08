@@ -34,4 +34,34 @@ def add_hand_attributes(control):
             )
             created.append(f"{control}.{attr}")
 
-   
+    for finger in fingers:
+        attr = f"{finger}_twist"
+
+        if not cmds.attributeQuery(attr, node=control, exists=True):
+            cmds.addAttr(
+                control,
+                longName=attr,
+                attributeType="float",
+                minValue=-3,
+                maxValue=3,
+                defaultValue=0,
+                keyable=True
+            )
+            created.append(f"{control}.{attr}")
+
+    for finger in fingers:
+        attr = f"{finger}_spread"
+
+        if not cmds.attributeQuery(attr, node=control, exists=True):
+            cmds.addAttr(
+                control,
+                longName=attr,
+                attributeType="float",
+                minValue=-5,
+                maxValue=5,
+                defaultValue=0,
+                keyable=True
+            )
+            created.append(f"{control}.{attr}")
+
+    return created
