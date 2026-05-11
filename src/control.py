@@ -26,20 +26,16 @@ def create_cube_control(name, size, position):
         ]
     )
 
-    
     grp = cmds.group(ctrl, name=f"{name}_grp")
 
-    
     cmds.xform(grp, ws=True, t=position)
 
-    
-    cmds.makeIdentity(ctrl, apply=True, t=True, r=True, s=True)
+    cmds.makeIdentity(grp, apply=True, t=True, r=True, s=True)
 
     return ctrl, grp
 
 
 def mirror_control(control):
- 
 
     
     grp = cmds.listRelatives(control, parent=True)[0]
@@ -48,7 +44,7 @@ def mirror_control(control):
     pos = cmds.xform(grp, q=True, ws=True, t=True)
     x, y, z = pos
 
-    
+    #
     axis_values = {"X": abs(x), "Y": abs(y), "Z": abs(z)}
     mirror_axis = max(axis_values, key=axis_values.get)
 
@@ -76,7 +72,7 @@ def mirror_control(control):
     elif mirror_axis == "Z":
         cmds.setAttr(f"{dup_grp}.scaleZ", -1)
 
-  
+    
     cmds.makeIdentity(dup_grp, apply=True, t=True, r=True, s=True)
 
     return dup_grp, dup_ctrl
