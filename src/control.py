@@ -1,5 +1,6 @@
 import maya.cmds as cmds
 
+
 def apply_color(control):
 
 
@@ -8,7 +9,7 @@ def apply_color(control):
     elif control.startswith("R_"):
         color = 13  
     else:
-        return  
+        return 
 
     shapes = cmds.listRelatives(control, shapes=True, fullPath=True)
     if shapes:
@@ -17,11 +18,10 @@ def apply_color(control):
             cmds.setAttr(f"{shape}.overrideColor", color)
 
 
+
+
 def create_cube_control(name, size, position):
-    """
-    Creates a cube-shaped control at a given position.
-    Returns (group, control)
-    """
+
 
     ctrl = cmds.curve(
         name=name,
@@ -47,9 +47,12 @@ def create_cube_control(name, size, position):
         ]
     )
 
+
     grp = cmds.group(ctrl, name=f"{name}_grp")
 
+
     cmds.xform(grp, ws=True, t=position)
+
 
     cmds.makeIdentity(grp, apply=True, t=True, r=True, s=True)
 
@@ -68,15 +71,15 @@ def mirror_control(control):
     pos = cmds.xform(grp, q=True, ws=True, t=True)
     x, y, z = pos
 
-
     axis_values = {"X": abs(x), "Y": abs(y), "Z": abs(z)}
     mirror_axis = max(axis_values, key=axis_values.get)
-
 
     dup_grp = cmds.duplicate(grp, rr=True)[0]
 
 
-    dup_ctrl = cmds.listRelatives(dup_grp, children=True, type="transform")[0]
+    children = cmds.listRelatives(dup_grp, children=True, fullPath=True)
+    dup_ctrl = [c for c in children if cmds.objectType(c) == "transform"][0]
+
 
     def swap_prefix(name):
         if name.startswith("L_"):
