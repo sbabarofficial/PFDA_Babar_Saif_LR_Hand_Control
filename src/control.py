@@ -5,19 +5,17 @@ def apply_color(control):
 
 
     if control.startswith("L_"):
-        color = 6   # Blue
+        color = 6   #
     elif control.startswith("R_"):
-        color = 13  # Red
+        color = 13  
     else:
-        return  # No prefix, no color
+        return  
 
     shapes = cmds.listRelatives(control, shapes=True, fullPath=True)
     if shapes:
         for shape in shapes:
             cmds.setAttr(f"{shape}.overrideEnabled", 1)
             cmds.setAttr(f"{shape}.overrideColor", color)
-
-
 
 
 def create_cube_control(name, size, position):
@@ -51,15 +49,14 @@ def create_cube_control(name, size, position):
     cmds.xform(grp, ws=True, t=position)
     cmds.makeIdentity(grp, apply=True, t=True, r=True, s=True)
 
-
     apply_color(ctrl)
 
     return grp, ctrl
 
 
 
-
 def mirror_control(control):
+
 
     grp = cmds.listRelatives(control, parent=True, type="transform")[0]
 
@@ -87,6 +84,7 @@ def mirror_control(control):
         for shape in shapes:
             short = shape.split("|")[-1]
             cmds.rename(shape, swap_prefix(short))
+
 
     attrs = cmds.listAttr(dup_ctrl, userDefined=True) or []
     for attr in attrs:

@@ -14,6 +14,8 @@ def create_user_control():
     size = float(input("Enter control size (e.g., 3): "))
 
     pos = get_user_position()
+
+    # Prefix applied ONLY here
     name = f"{prefix}_hand_ctrl"
 
     grp, ctrl = control.create_cube_control(
