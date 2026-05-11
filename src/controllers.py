@@ -1,7 +1,6 @@
 import maya.cmds as cmds
 
 
-
 def apply_color(control):
     if control.startswith("L_"):
         color = 6
@@ -103,12 +102,22 @@ def mirror_control(control):
 
     if shapes:
         for i, shape in enumerate(shapes):
+
+           
+            if cmds.getAttr(shape + ".intermediateObject"):
+                continue
+
+          
+            if len(cmds.listRelatives(shape, parent=True)) > 1:
+                continue
+
             shape_full = cmds.ls(shape, long=True)[0]
             short = shape_full.split("|")[-1]
 
             base_new_name = swap_prefix(short)
             new_name = base_new_name
 
+          
             if cmds.objExists(new_name):
                 new_name = f"{base_new_name}_{i}"
 
