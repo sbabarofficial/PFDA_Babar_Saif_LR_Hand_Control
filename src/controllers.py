@@ -1,13 +1,12 @@
 import maya.cmds as cmds
 
 
-
 def apply_color(control):
-
+    """Applies color override based on prefix."""
     if control.startswith("L_"):
-        color = 6   
+        color = 6   # Blue
     elif control.startswith("R_"):
-        color = 13  
+        color = 13  # Red
     else:
         return
 
@@ -55,9 +54,8 @@ def create_cube_control(name, size, position):
 
 
 
-
 def mirror_control(control):
-
+    """Mirrors a control across the axis farthest from origin."""
 
     grp = cmds.listRelatives(control, parent=True, type="transform")[0]
 
@@ -79,8 +77,17 @@ def mirror_control(control):
             return name.replace("R_", "L_", 1)
         return name
 
-    dup_grp = cmds.rename(dup_grp, swap_prefix(dup_grp))
-    dup_ctrl = cmds.rename(dup_ctrl, swap_prefix(dup_ctrl))
+    new_grp_name = swap_prefix(dup_grp)
+    try:
+        dup_grp = cmds.rename(dup_grp, new_grp_name)
+    except RuntimeError:
+        dup_grp = cmds.rename(dup_grp, new_grp_name + "_mirrored")
+
+    new_ctrl_name = swap_prefix(dup_ctrl)
+    try:
+        dup_ctrl = cmds.rename(dup_ctrl, new_ctrl_name)
+    except RuntimeError:
+        dup_ctrl = cmds.rename(dup_ctrl, new_ctrl_name + "_mirrored")
 
 
     shapes = cmds.listRelatives(dup_ctrl, shapes=True, fullPath=True)
@@ -96,6 +103,7 @@ def mirror_control(control):
                     cmds.rename(shape_full, new_name)
                 except RuntimeError:
                     pass
+
 
     if mirror_axis == "X":
         cmds.setAttr(f"{dup_grp}.scaleX", -1)
