@@ -3,11 +3,11 @@ import maya.cmds as cmds
 
 
 def apply_color(control):
-    
+
     if control.startswith("L_"):
         color = 6   
     elif control.startswith("R_"):
-        color = 13 
+        color = 13  
     else:
         return
 
@@ -16,7 +16,6 @@ def apply_color(control):
         for shape in shapes:
             cmds.setAttr(f"{shape}.overrideEnabled", 1)
             cmds.setAttr(f"{shape}.overrideColor", color)
-
 
 
 
@@ -58,7 +57,7 @@ def create_cube_control(name, size, position):
 
 
 def mirror_control(control):
-   
+
 
     grp = cmds.listRelatives(control, parent=True, type="transform")[0]
 
@@ -83,8 +82,9 @@ def mirror_control(control):
     dup_grp = cmds.rename(dup_grp, swap_prefix(dup_grp))
     dup_ctrl = cmds.rename(dup_ctrl, swap_prefix(dup_ctrl))
 
-    
+
     shapes = cmds.listRelatives(dup_ctrl, shapes=True, fullPath=True)
+
     if shapes:
         for shape in shapes:
             shape_full = cmds.ls(shape, long=True)[0]
@@ -97,7 +97,6 @@ def mirror_control(control):
                 except RuntimeError:
                     pass
 
-    
     if mirror_axis == "X":
         cmds.setAttr(f"{dup_grp}.scaleX", -1)
     elif mirror_axis == "Y":
@@ -108,4 +107,5 @@ def mirror_control(control):
     cmds.makeIdentity(dup_grp, apply=True, t=True, r=True, s=True)
 
     apply_color(dup_ctrl)
+
     return dup_grp, dup_ctrl
