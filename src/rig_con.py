@@ -1,5 +1,5 @@
 import maya.cmds as cmds
-import control
+import controllers
 import attributes
 
 def get_user_position():
@@ -14,11 +14,9 @@ def create_user_control():
     size = float(input("Enter control size (e.g., 3): "))
 
     pos = get_user_position()
-
-    # Prefix applied ONLY here
     name = f"{prefix}_hand_ctrl"
 
-    grp, ctrl = control.create_cube_control(
+    grp, ctrl = controllers.create_cube_control(
         name=name,
         size=size,
         position=pos
@@ -30,7 +28,7 @@ def create_user_control():
     return grp, ctrl
 
 def mirror_user_control(ctrl):
-    mirrored_grp, mirrored_ctrl = control.mirror_control(ctrl)
+    mirrored_grp, mirrored_ctrl = controllers.mirror_control(ctrl)
     attributes.add_hand_attributes(mirrored_ctrl)
     print(f"Mirrored control created: {mirrored_ctrl}")
     return mirrored_grp, mirrored_ctrl

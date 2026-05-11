@@ -1,21 +1,22 @@
 import maya.cmds as cmds
 
 
+
 def apply_color(control):
-
-
+    
     if control.startswith("L_"):
         color = 6   
     elif control.startswith("R_"):
-        color = 13  
+        color = 13 
     else:
-        return  
+        return
 
     shapes = cmds.listRelatives(control, shapes=True, fullPath=True)
     if shapes:
         for shape in shapes:
             cmds.setAttr(f"{shape}.overrideEnabled", 1)
             cmds.setAttr(f"{shape}.overrideColor", color)
+
 
 
 
@@ -51,13 +52,13 @@ def create_cube_control(name, size, position):
     cmds.makeIdentity(grp, apply=True, t=True, r=True, s=True)
 
     apply_color(ctrl)
-
     return grp, ctrl
 
 
 
 
 def mirror_control(control):
+   
 
     grp = cmds.listRelatives(control, parent=True, type="transform")[0]
 
@@ -69,11 +70,9 @@ def mirror_control(control):
 
     dup_grp = cmds.duplicate(grp, rr=True)[0]
 
-   
     children = cmds.listRelatives(dup_grp, children=True, fullPath=True)
     dup_ctrl = [c for c in children if cmds.objectType(c) == "transform"][0]
 
-    
     def swap_prefix(name):
         if name.startswith("L_"):
             return name.replace("L_", "R_", 1)
@@ -81,28 +80,22 @@ def mirror_control(control):
             return name.replace("R_", "L_", 1)
         return name
 
-    
     dup_grp = cmds.rename(dup_grp, swap_prefix(dup_grp))
-
-   
     dup_ctrl = cmds.rename(dup_ctrl, swap_prefix(dup_ctrl))
 
     
     shapes = cmds.listRelatives(dup_ctrl, shapes=True, fullPath=True)
     if shapes:
         for shape in shapes:
-            short = shape.split("|")[-1]
+            shape_full = cmds.ls(shape, long=True)[0]
+            short = shape_full.split("|")[-1]
             new_name = swap_prefix(short)
 
-            if new_name != short: 
-                cmds.rename(shape, new_name)
-
-    
-    attrs = cmds.listAttr(dup_ctrl, userDefined=True) or []
-    for attr in attrs:
-        new_attr = swap_prefix(attr)
-        if new_attr != attr:
-            cmds.renameAttr(f"{dup_ctrl}.{attr}", new_attr)
+            if new_name != short and new_name not in ("", None):
+                try:
+                    cmds.rename(shape_full, new_name)
+                except RuntimeError:
+                    pass
 
     
     if mirror_axis == "X":
@@ -115,5 +108,4 @@ def mirror_control(control):
     cmds.makeIdentity(dup_grp, apply=True, t=True, r=True, s=True)
 
     apply_color(dup_ctrl)
-
     return dup_grp, dup_ctrl
