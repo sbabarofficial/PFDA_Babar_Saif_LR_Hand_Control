@@ -1,11 +1,10 @@
 import maya.cmds as cmds
 
-
 def apply_color(control):
 
 
     if control.startswith("L_"):
-        color = 6   #
+        color = 6   
     elif control.startswith("R_"):
         color = 13  
     else:
@@ -19,7 +18,10 @@ def apply_color(control):
 
 
 def create_cube_control(name, size, position):
-
+    """
+    Creates a cube-shaped control at a given position.
+    Returns (group, control)
+    """
 
     ctrl = cmds.curve(
         name=name,
@@ -46,7 +48,9 @@ def create_cube_control(name, size, position):
     )
 
     grp = cmds.group(ctrl, name=f"{name}_grp")
+
     cmds.xform(grp, ws=True, t=position)
+
     cmds.makeIdentity(grp, apply=True, t=True, r=True, s=True)
 
     apply_color(ctrl)
@@ -60,13 +64,18 @@ def mirror_control(control):
 
     grp = cmds.listRelatives(control, parent=True, type="transform")[0]
 
+
     pos = cmds.xform(grp, q=True, ws=True, t=True)
     x, y, z = pos
+
 
     axis_values = {"X": abs(x), "Y": abs(y), "Z": abs(z)}
     mirror_axis = max(axis_values, key=axis_values.get)
 
+
     dup_grp = cmds.duplicate(grp, rr=True)[0]
+
+
     dup_ctrl = cmds.listRelatives(dup_grp, children=True, type="transform")[0]
 
     def swap_prefix(name):
@@ -76,8 +85,12 @@ def mirror_control(control):
             return name.replace("R_", "L_", 1)
         return name
 
+
     dup_grp = cmds.rename(dup_grp, swap_prefix(dup_grp))
+
+
     dup_ctrl = cmds.rename(dup_ctrl, swap_prefix(dup_ctrl))
+
 
     shapes = cmds.listRelatives(dup_ctrl, shapes=True, fullPath=True)
     if shapes:
@@ -92,6 +105,7 @@ def mirror_control(control):
         if new_attr != attr:
             cmds.renameAttr(f"{dup_ctrl}.{attr}", new_attr)
 
+
     if mirror_axis == "X":
         cmds.setAttr(f"{dup_grp}.scaleX", -1)
     elif mirror_axis == "Y":
@@ -99,7 +113,9 @@ def mirror_control(control):
     elif mirror_axis == "Z":
         cmds.setAttr(f"{dup_grp}.scaleZ", -1)
 
+
     cmds.makeIdentity(dup_grp, apply=True, t=True, r=True, s=True)
+
 
     apply_color(dup_ctrl)
 

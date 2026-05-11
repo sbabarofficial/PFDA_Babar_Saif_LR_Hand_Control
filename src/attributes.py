@@ -2,10 +2,8 @@ import maya.cmds as cmds
 
 def add_hand_attributes(control):
 
-
     fingers = ["fist", "fore", "mid", "ring", "pinky", "thumb"]
     created = []
-
 
     if not cmds.attributeQuery("Fingers", node=control, exists=True):
         cmds.addAttr(
@@ -16,7 +14,6 @@ def add_hand_attributes(control):
         )
         cmds.setAttr(f"{control}.Fingers", lock=True)
         created.append(f"{control}.Fingers")
-
 
     for finger in fingers:
         attr = f"{finger}_clench"
@@ -34,10 +31,8 @@ def add_hand_attributes(control):
             )
             created.append(f"{control}.{attr}")
 
-
     for finger in fingers:
         attr = f"{finger}_twist"
-
         if not cmds.attributeQuery(attr, node=control, exists=True):
             cmds.addAttr(
                 control,
@@ -50,10 +45,8 @@ def add_hand_attributes(control):
             )
             created.append(f"{control}.{attr}")
 
- 
     for finger in fingers:
         attr = f"{finger}_spread"
-
         if not cmds.attributeQuery(attr, node=control, exists=True):
             cmds.addAttr(
                 control,
