@@ -16,7 +16,6 @@ def apply_color(control):
             cmds.setAttr(f"{shape}.overrideColor", color)
 
 
-
 def create_cube_control(name, size, position):
 
     ctrl = cmds.curve(
@@ -42,6 +41,13 @@ def create_cube_control(name, size, position):
             (size, size, -size)
         ]
     )
+
+
+    shapes = cmds.listRelatives(ctrl, shapes=True, fullPath=True)
+    if len(shapes) > 1:
+        for s in shapes[1:]:
+            cmds.parent(s, shapes[0], shape=True, relative=True)
+            cmds.delete(s)
 
     grp = cmds.group(ctrl, name=f"{name}_grp")
     cmds.xform(grp, ws=True, t=position)
