@@ -53,6 +53,7 @@ def create_cube_control(name, size, position):
 
 
 
+
 def mirror_control(control):
 
     grp = cmds.listRelatives(control, parent=True, type="transform")[0]
@@ -75,20 +76,29 @@ def mirror_control(control):
             return name.replace("R_", "L_", 1)
         return name
 
-    new_grp_name = swap_prefix(dup_grp)
-    try:
-        dup_grp = cmds.rename(dup_grp, new_grp_name)
-    except RuntimeError:
-        dup_grp = cmds.rename(dup_grp, new_grp_name + "_mirrored")
 
-    # SAFE CONTROL RENAME
-    new_ctrl_name = swap_prefix(dup_ctrl)
-    try:
-        dup_ctrl = cmds.rename(dup_ctrl, new_ctrl_name)
-    except RuntimeError:
-        dup_ctrl = cmds.rename(dup_ctrl, new_ctrl_name + "_mirrored")
+    base_grp_name = swap_prefix(dup_grp)
+    new_grp_name = base_grp_name
 
-    
+    i = 1
+    while cmds.objExists(new_grp_name):
+        new_grp_name = f"{base_grp_name}_{i}"
+        i += 1
+
+    dup_grp = cmds.rename(dup_grp, new_grp_name)
+
+
+    base_ctrl_name = swap_prefix(dup_ctrl)
+    new_ctrl_name = base_ctrl_name
+
+    i = 1
+    while cmds.objExists(new_ctrl_name):
+        new_ctrl_name = f"{base_ctrl_name}_{i}"
+        i += 1
+
+    dup_ctrl = cmds.rename(dup_ctrl, new_ctrl_name)
+
+
     shapes = cmds.listRelatives(dup_ctrl, shapes=True, fullPath=True)
 
     if shapes:
@@ -107,7 +117,7 @@ def mirror_control(control):
             except RuntimeError:
                 pass
 
-    
+
     if mirror_axis == "X":
         cmds.setAttr(f"{dup_grp}.scaleX", -1)
     elif mirror_axis == "Y":
