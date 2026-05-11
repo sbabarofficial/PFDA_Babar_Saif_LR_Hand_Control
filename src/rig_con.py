@@ -19,9 +19,10 @@ def create_user_control():
 
     pos = get_user_position()
 
-    grp, ctrl = control.create_cube_control(
-        prefix=prefix,
-        name="hand_ctrl",
+    ctrl_name = f"{prefix}_hand_ctrl"
+
+    ctrl, grp = control.create_cube_control(
+        name=ctrl_name,
         size=size,
         position=pos
     )
@@ -34,7 +35,8 @@ def create_user_control():
 
 def mirror_user_control(ctrl):
 
-    mirrored_grp, mirrored_ctrl = control.mirror_control(ctrl, axis="X")
+    mirrored_grp, mirrored_ctrl = control.mirror_control(ctrl)
+
     attributes.add_hand_attributes(mirrored_ctrl)
     print(f"Mirrored control created: {mirrored_ctrl}")
     return mirrored_grp, mirrored_ctrl
