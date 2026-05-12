@@ -30,6 +30,12 @@ This project demonstrates practical Python scripting for digital arts and media,
 - Safe renaming system to avoid Maya errors
 
 ---
+### How to use - 
+The prograne will give 3 prompts asking- 
+
+1.Prefix (L/R)
+2.Control size
+3.Wether the user would like to mirror the control (this creates a 2nd instance of the control with the opposite orefix at the start)
 
 ## How to Install and Use This Tool in Maya
 
@@ -66,10 +72,3 @@ In Maya:
 import sys
 sys.path.append(r"C:/PATH/TO/PFDA_Babar_Saif_LR_Hand_Control/src")
 
----
-### How to use - 
-The prograne will give 3 prompts asking- 
-
-1.Prefix (L/R)
-2.Control size
-3.Wether the user would like to mirror the control (this creates a 2nd instance of the control with the opposite orefix at the start)
