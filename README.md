@@ -61,13 +61,15 @@ In Maya:
 2. Switch to the **Python** tab
 3. Run this (update the path):
 
-```python
-import sys
-sys.path.append(r"C:/PATH/TO/PFDA_Babar_Saif_LR_Hand_Control/src")
-
+---
 ### How to use - 
 The prograne will give 3 prompts asking- 
 
 1.Prefix (L/R)
 2.Control size
 3.Wether the user would like to mirror the control (this creates a 2nd instance of the control with the opposite orefix at the start)
+
+```python
+import sys
+sys.path.append(r"C:/PATH/TO/PFDA_Babar_Saif_LR_Hand_Control/src")
+
